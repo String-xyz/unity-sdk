@@ -1,0 +1,11 @@
+{
+  "name": "xyz.string.sdk",
+  "description": "Unity integration for String Pay",
+  "displayName": "String SDK",
+  "unity": "2020.3",
+  "author": "string.xyz",
+  "version": "0.0.1",
+  "gitDependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+  }
+}
