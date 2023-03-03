@@ -13,7 +13,7 @@ namespace StringSDK
     public class QuoteRequest
     {
         public string userAddress;
-        public int chainID;
+        public int64 chainID; // todo: make this unsigned in both the backend and this sdk
         public string contractAddress;
         public string contractFunction;
         public string contractReturn;
@@ -21,7 +21,7 @@ namespace StringSDK
         public string txValue;
         public string gasLimit;
 
-        public QuoteRequest(string userAddress, int chainID, string contractAddress, string contractFunction, string contractReturn, string[] contractParameters, string txValue, string gasLimit)
+        public QuoteRequest(string userAddress, int64 chainID, string contractAddress, string contractFunction, string contractReturn, string[] contractParameters, string txValue, string gasLimit)
         {
             this.userAddress = userAddress;
             this.chainID = chainID;
@@ -43,14 +43,14 @@ namespace StringSDK
     public class TransactionRequest
     {
         public string userAddress;
-        public int chainID;
+        public int64 chainID; // todo: make this unsigned in both the backend and this sdk
         public string contractAddress;
         public string contractFunction;
         public string contractReturn;
         public string[] contractParameters;
         public string txValue;
         public string gasLimit;
-        public int timestamp;
+        public int64 timestamp; // todo: make this unsigned in both the backend and this sdk
         public double baseUSD;
         public double gasUSD;
         public double tokenUSD;
