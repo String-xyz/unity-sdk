@@ -13,7 +13,7 @@ namespace StringSDK
     public class QuoteRequest
     {
         public string userAddress;
-        public int chainID;
+        public int chainId; // todo: make this unsigned in both the backend and this sdk
         public string contractAddress;
         public string contractFunction;
         public string contractReturn;
@@ -21,10 +21,10 @@ namespace StringSDK
         public string txValue;
         public string gasLimit;
 
-        public QuoteRequest(string userAddress, int chainID, string contractAddress, string contractFunction, string contractReturn, string[] contractParameters, string txValue, string gasLimit)
+        public QuoteRequest(string userAddress, int chainId, string contractAddress, string contractFunction, string contractReturn, string[] contractParameters, string txValue, string gasLimit)
         {
             this.userAddress = userAddress;
-            this.chainID = chainID;
+            this.chainId = chainId;
             this.contractAddress = contractAddress;
             this.contractFunction = contractFunction;
             this.contractReturn = contractReturn;
@@ -43,19 +43,19 @@ namespace StringSDK
     public class TransactionRequest
     {
         public string userAddress;
-        public int chainID;
+        public long chainId; // todo: make this unsigned in both the backend and this sdk
         public string contractAddress;
         public string contractFunction;
         public string contractReturn;
         public string[] contractParameters;
         public string txValue;
         public string gasLimit;
-        public int timestamp;
-        public double baseUSD;
-        public double gasUSD;
-        public double tokenUSD;
-        public double serviceUSD;
-        public double totalUSD;
+        public long timestamp; // todo: make this unsigned in both the backend and this sdk
+        public string baseUSD;
+        public string gasUSD;
+        public string tokenUSD;
+        public string serviceUSD;
+        public string totalUSD;
         public string signature;
         public string cardToken;
 
@@ -68,7 +68,7 @@ namespace StringSDK
     [Serializable]
     public class TransactionResponse
     {
-        public string txID;
+        public string txId;
         public string txUrl;
 
         public override string ToString()
