@@ -95,11 +95,11 @@ namespace StringSDK
         public string signature;
         public Fingerprint fingerprint;
 
-        public LoginRequest(string nonce, string signature, string visitorId, string requestId)
+        public LoginRequest(string nonce, string signature)
         {
             this.nonce = nonce;
             this.signature = signature;
-            fingerprint = new Fingerprint(visitorId, requestId);
+            fingerprint = new Fingerprint("dle6eqRHxjPEj4H3WLoC", "1671054875232.EcrKjS");
         }
 
         public override string ToString()
