@@ -7,7 +7,7 @@ namespace StringSDK
 {
 public class StringWebView : MonoBehaviour 
 {
-    public CanvasWebViewPrefab vuplexWeb;
+    public CanvasWebViewPrefab vuplexWeb { private set; get; }
 
     async void Start() 
     {
