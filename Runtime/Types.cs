@@ -99,7 +99,7 @@ namespace StringSDK
         {
             this.nonce = nonce;
             this.signature = signature;
-            fingerprint = new Fingerprint("dle6eqRHxjPEj4H3WLoC", "1671054875232.EcrKjS");
+            fingerprint = new Fingerprint(WebEventManager.FingerprintVisitorId, WebEventManager.FingerprintRequestId);
         }
 
         public override string ToString()

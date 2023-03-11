@@ -45,6 +45,10 @@ namespace StringSDK
 
         public static async UniTask<LoginResponse> Login(LoginRequest loginRequest, CancellationToken token = default)
         {
+            if (!WebEventManager.FingerprintAvailable())
+            {
+                Debug.Log("WARNING: Fingerprint Data Not Yet Available");
+            }
             try
             {
                 return await apiClient.Post<LoginResponse>($"/login/sign", loginRequest);
@@ -91,7 +95,22 @@ namespace StringSDK
 
         public static async UniTask<TransactionResponse> Transact(TransactionRequest transactionRequest, CancellationToken token = default)
         {
+            if (!WebEventManager.CardValid || WebEventManager.CardToken == "")
+            {
+                Debug.Log("WARNING: Card Info is invalid or not provided yet");
+            }
             return await apiClient.Post<TransactionResponse>($"/transactions", transactionRequest);
+        }
+
+        // Card stuff
+        public static bool ReadyForPayment()
+        {
+            return (WebEventManager.CardToken != "" && WebEventManager.CardValid);
+        }
+
+        public static string GetPaymentToken()
+        {
+            return WebEventManager.CardToken;
         }
     }
 
