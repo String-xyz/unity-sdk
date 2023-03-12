@@ -14,6 +14,8 @@ public class WebEventManager:MonoBehaviour  {
     public static string CardToken  { private set; get; }
     public static bool CardValid    { private set; get; }
     public static string CardVendor { private set; get; }
+    public static string FingerprintVisitorId { private set; get; }
+    public static string FingerprintRequestId { private set; get; }
 
     public static event Action<string> EventReceived;
     public static event Action<StringEvent<TokenizationPayload>> CardTokenized;
@@ -97,6 +99,15 @@ public class WebEventManager:MonoBehaviour  {
                  }
                 CardValid = validation.data.data.valid;
                 CardValidationChanged?.Invoke(validation);
+                break;
+            case "fingerprint":
+                var fingerprint = StringEvent<FingerprintPayload>.FromJSON(strPayload);
+                 if (fingerprint == null) 
+                 { 
+                    break;
+                 }
+                FingerprintVisitorId = fingerprint.data.data.visitorId;
+                FingerprintRequestId = fingerprint.data.data.requestId;
                 break;
             default:
                 break;

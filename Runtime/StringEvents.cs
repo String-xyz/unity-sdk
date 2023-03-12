@@ -27,6 +27,13 @@ public class VendorChangedPayload
 }
 
 [Serializable]
+public class FingerprintPayload 
+{ 
+    public string requestId;
+    public string visitorId;
+}
+
+[Serializable]
 public class PayloadData <T>
 {
     public string eventName;
