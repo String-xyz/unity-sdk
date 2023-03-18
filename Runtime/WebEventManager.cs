@@ -31,7 +31,8 @@ namespace StringSDK
         {  
             Webview = web;
             Webview.WebView.MessageEmitted += handleEvent;
-            InitIframe();
+            var style = new DefaultStyle();
+            InitIframe(style);
         }
         
         static void handleEvent(object sender, EventArgs<string> e) 
@@ -46,9 +47,14 @@ namespace StringSDK
             var eventData = new PayloadData<T>(name, data);
             return new StringEvent<T>(CHANNEL, eventData).ToJSON();      
         }
-        public static void InitIframe() 
+        public static void InitIframe(Style style) 
         {
-            sendEvent(new EmptyPayloadData(CHANNEL, INIT_IFRAME).ToJSON());
+            sendEvent(CreateEvent(INIT_IFRAME, style));
+        }
+
+        public static void SetStyle(Style style) 
+        { 
+            InitIframe(style);
         }
 
         public static void SubmitCard() 
@@ -65,6 +71,7 @@ namespace StringSDK
                 loaded = true;
             }
             Webview.WebView.PostMessage(payload);
+            Debug.Log("event sent "+payload);
         }
 
         private static void parseEventPayload(string strPayload) 
