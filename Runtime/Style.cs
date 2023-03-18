@@ -55,17 +55,29 @@ namespace StringSDK
     [Serializable]
     public class Style 
     {
-    public BaseStyle @base;
-    public Autofill autofill;
-    public StateStyle hover;
-    public StateStyle focus;
-    public StateStyle valid;
-    public Placeholder placeholder;
-    public string ToJSON()
-    {
-        return JsonUtility.ToJson(this);
-    }
+        public BaseStyle @base;
+        public Autofill autofill;
+        public StateStyle hover;
+        public StateStyle focus;
+        public StateStyle valid;
+        public Placeholder placeholder;
 
+        public Style(string baseColor, string baseSize, string autofillColor, string hoverColor, string focusColor, string validColor, string placeholderBaseColor, string placeholderBaseSize, string placeholderStateColor)
+        {
+            this.@base = new BaseStyle(baseColor, baseSize);
+            this.autofill = new Autofill(autofillColor);
+            this.hover = new StateStyle(hoverColor);
+            this.focus = new StateStyle(focusColor);
+            this.valid = new StateStyle(validColor);
+            this.placeholder = new Placeholder(new BaseStyle(placeholderBaseColor, placeholderBaseSize), new StateStyle(placeholderStateColor));
+        }
+
+        public Style() {}
+
+        public string ToJSON()
+        {
+            return JsonUtility.ToJson(this);
+        }
     }
 
     [Serializable]
