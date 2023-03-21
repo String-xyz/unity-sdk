@@ -60,15 +60,17 @@ namespace StringSDK
         public StateStyle hover;
         public StateStyle focus;
         public StateStyle valid;
+        public StateStyle invalid;
         public Placeholder placeholder;
 
-        public Style(string baseColor, string baseSize, string autofillColor, string hoverColor, string focusColor, string validColor, string placeholderBaseColor, string placeholderBaseSize, string placeholderStateColor)
+        public Style(string baseColor, string baseSize, string autofillColor, string hoverColor, string focusColor, string validColor, string invalidColor, string placeholderBaseColor, string placeholderBaseSize, string placeholderStateColor)
         {
             this.@base = new BaseStyle(baseColor, baseSize);
             this.autofill = new Autofill(autofillColor);
             this.hover = new StateStyle(hoverColor);
             this.focus = new StateStyle(focusColor);
             this.valid = new StateStyle(validColor);
+            this.invalid = new StateStyle(invalidColor);
             this.placeholder = new Placeholder(new BaseStyle(placeholderBaseColor, placeholderBaseSize), new StateStyle(placeholderStateColor));
         }
 
@@ -87,9 +89,10 @@ namespace StringSDK
             this.@base = new BaseStyle("black", "16px");
             this.autofill = new Autofill("yellow");
             this.hover = new StateStyle("blue");
-            this.focus = new StateStyle("green");
-            this.valid = new StateStyle("red");
-            this.placeholder = new Placeholder(new BaseStyle("ffff", "20px"), new StateStyle("blue"));
+            this.focus = new StateStyle("white");
+            this.valid = new StateStyle("green");
+            this.invalid = new StateStyle("red");
+            this.placeholder = new Placeholder(new BaseStyle("ffff", "16px"), new StateStyle("blue"));
         }
     }
 }
