@@ -17,7 +17,7 @@ namespace StringSDK
         public static string CardVendor { private set; get; }
         public static string FingerprintVisitorId { private set; get; }
         public static string FingerprintRequestId { private set; get; }
-
+        public static Style defaultStyle { private set; get; }
         public static event Action<string> EventReceived;
         public static event Action<StringEvent<TokenizationPayload>> CardTokenized;
         public static event Action<StringEvent<ValidationPayload>> CardValidationChanged;
@@ -30,9 +30,8 @@ namespace StringSDK
         public static void RegisterForEvent(CanvasWebViewPrefab web)
         {  
             Webview = web;
+            defaultStyle = new DefaultStyle();
             Webview.WebView.MessageEmitted += handleEvent;
-            var style = new DefaultStyle();
-            InitIframe(style);
         }
         
         static void handleEvent(object sender, EventArgs<string> e) 
@@ -51,6 +50,10 @@ namespace StringSDK
         {
             sendEvent(CreateEvent(INIT_IFRAME, style));
         }
+         public static void InitIframe() 
+        {
+            sendEvent(CreateEvent(INIT_IFRAME, defaultStyle));
+        }
 
         public static void SetStyle(Style style) 
         { 
@@ -67,7 +70,7 @@ namespace StringSDK
             Debug.Log("sending event "+ payload);
             if (!loaded)
             {
-                await Webview.WebView.WaitForNextPageLoadToFinish();
+               // register first event as initIframe and set loaded to true
                 loaded = true;
             }
             Webview.WebView.PostMessage(payload);
