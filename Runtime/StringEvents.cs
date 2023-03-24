@@ -6,6 +6,13 @@ using UnityEngine;
 namespace StringSDK
 {
 [Serializable]
+public class Cardholder 
+{
+    // cardholder's full name e.g John Doe. 
+    public string name;
+}
+
+[Serializable]
 public class TokenizationPayload 
 {
     public string token;
