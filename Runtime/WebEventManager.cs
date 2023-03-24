@@ -68,11 +68,6 @@ namespace StringSDK
         async private static void sendEvent(string payload)
         {
             Debug.Log("sending event "+ payload);
-            if (!loaded)
-            {
-               // register first event as initIframe and set loaded to true
-                loaded = true;
-            }
             Webview.WebView.PostMessage(payload);
             Debug.Log("event sent "+payload);
         }
@@ -82,6 +77,19 @@ namespace StringSDK
             var  payload = EmptyPayloadData.FromJSON(strPayload);
             switch(payload.data.eventName) 
             { 
+                case "fingerprint":
+                    var fingerprint = StringEvent<FingerprintPayload>.FromJSON(strPayload);
+                    if (fingerprint == null) 
+                    { 
+                        break;
+                    }
+                    FingerprintVisitorId = fingerprint.data.data.visitorId;
+                    FingerprintRequestId = fingerprint.data.data.requestId;
+                    // fingerprint is the first event we receive
+                    // we should use this as a way of knowing the iframe has been loaded
+                    // and is ready to recieve events, so setting loaded to true.
+                    loaded = true;
+                    break;
                 case "card_tokenized":
                 var tokenization = StringEvent<TokenizationPayload>.FromJSON(strPayload);
                 if (tokenization == null) 
@@ -116,15 +124,6 @@ namespace StringSDK
                     }
                     CardValid = validation.data.data.valid;
                     CardValidationChanged?.Invoke(validation);
-                    break;
-                case "fingerprint":
-                    var fingerprint = StringEvent<FingerprintPayload>.FromJSON(strPayload);
-                    if (fingerprint == null) 
-                    { 
-                        break;
-                    }
-                    FingerprintVisitorId = fingerprint.data.data.visitorId;
-                    FingerprintRequestId = fingerprint.data.data.requestId;
                     break;
                 default:
                     break;
