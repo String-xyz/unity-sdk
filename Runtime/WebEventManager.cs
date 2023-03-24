@@ -19,6 +19,7 @@ namespace StringSDK
         public static string FingerprintRequestId { private set; get; }
         public static Style defaultStyle { private set; get; }
         public static event Action<string> EventReceived;
+        public static event Action<bool> IframeLoaded;
         public static event Action<StringEvent<TokenizationPayload>> CardTokenized;
         public static event Action<StringEvent<ValidationPayload>> CardValidationChanged;
         public static event Action<StringEvent<VendorChangedPayload>> CardVendorChanged;
@@ -89,6 +90,7 @@ namespace StringSDK
                     // we should use this as a way of knowing the iframe has been loaded
                     // and is ready to recieve events, so setting loaded to true.
                     loaded = true;
+                    IframeLoaded?.Invoke(true);
                     break;
                 case "card_tokenized":
                 var tokenization = StringEvent<TokenizationPayload>.FromJSON(strPayload);
