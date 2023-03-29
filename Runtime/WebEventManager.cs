@@ -17,8 +17,9 @@ namespace StringSDK
         public static string CardVendor { private set; get; }
         public static string FingerprintVisitorId { private set; get; }
         public static string FingerprintRequestId { private set; get; }
-
+        public static Style defaultStyle { private set; get; }
         public static event Action<string> EventReceived;
+        public static event Action<bool> IframeLoaded;
         public static event Action<StringEvent<TokenizationPayload>> CardTokenized;
         public static event Action<StringEvent<ValidationPayload>> CardValidationChanged;
         public static event Action<StringEvent<VendorChangedPayload>> CardVendorChanged;
@@ -30,8 +31,8 @@ namespace StringSDK
         public static void RegisterForEvent(CanvasWebViewPrefab web)
         {  
             Webview = web;
+            defaultStyle = new DefaultStyle();
             Webview.WebView.MessageEmitted += handleEvent;
-            InitIframe();
         }
         
         static void handleEvent(object sender, EventArgs<string> e) 
@@ -46,9 +47,18 @@ namespace StringSDK
             var eventData = new PayloadData<T>(name, data);
             return new StringEvent<T>(CHANNEL, eventData).ToJSON();      
         }
-        public static void InitIframe() 
+        public static void InitIframe(Style style) 
         {
-            sendEvent(new EmptyPayloadData(CHANNEL, INIT_IFRAME).ToJSON());
+            sendEvent(CreateEvent(INIT_IFRAME, style));
+        }
+         public static void InitIframe() 
+        {
+            sendEvent(CreateEvent(INIT_IFRAME, defaultStyle));
+        }
+
+        public static void SetStyle(Style style) 
+        { 
+            InitIframe(style);
         }
 
         public static void SubmitCard() 
@@ -59,12 +69,8 @@ namespace StringSDK
         async private static void sendEvent(string payload)
         {
             Debug.Log("sending event "+ payload);
-            if (!loaded)
-            {
-                await Webview.WebView.WaitForNextPageLoadToFinish();
-                loaded = true;
-            }
             Webview.WebView.PostMessage(payload);
+            Debug.Log("event sent "+payload);
         }
 
         private static void parseEventPayload(string strPayload) 
@@ -72,6 +78,20 @@ namespace StringSDK
             var  payload = EmptyPayloadData.FromJSON(strPayload);
             switch(payload.data.eventName) 
             { 
+                case "fingerprint":
+                    var fingerprint = StringEvent<FingerprintPayload>.FromJSON(strPayload);
+                    if (fingerprint == null) 
+                    { 
+                        break;
+                    }
+                    FingerprintVisitorId = fingerprint.data.data.visitorId;
+                    FingerprintRequestId = fingerprint.data.data.requestId;
+                    // fingerprint is the first event we receive
+                    // we should use this as a way of knowing the iframe has been loaded
+                    // and is ready to recieve events, so setting loaded to true.
+                    loaded = true;
+                    IframeLoaded?.Invoke(true);
+                    break;
                 case "card_tokenized":
                 var tokenization = StringEvent<TokenizationPayload>.FromJSON(strPayload);
                 if (tokenization == null) 
@@ -106,15 +126,6 @@ namespace StringSDK
                     }
                     CardValid = validation.data.data.valid;
                     CardValidationChanged?.Invoke(validation);
-                    break;
-                case "fingerprint":
-                    var fingerprint = StringEvent<FingerprintPayload>.FromJSON(strPayload);
-                    if (fingerprint == null) 
-                    { 
-                        break;
-                    }
-                    FingerprintVisitorId = fingerprint.data.data.visitorId;
-                    FingerprintRequestId = fingerprint.data.data.requestId;
                     break;
                 default:
                     break;

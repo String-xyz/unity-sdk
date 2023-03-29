@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace StringSDK
 {
+
 [Serializable]
 public class TokenizationPayload 
 {

@@ -16,6 +16,7 @@ namespace StringSDK
             // Load a URL once the weview has loaded
             await vuplexWeb.WaitUntilInitialized();
             vuplexWeb.WebView.LoadUrl("https://payment-iframe.dev.string-api.xyz/unity.html");
+            vuplexWeb.WebView.SetDefaultBackgroundEnabled(false);
             // let the event manager register for events
             WebEventManager.RegisterForEvent(vuplexWeb);
         }
