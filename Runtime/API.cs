@@ -51,7 +51,7 @@ namespace StringSDK
             }
             try
             {
-                var bypassDevice = loginOptions?.bypassDeviceCheck || false ? "?bypassDevice=true" : "";
+                var bypassDevice = loginOptions?.bypassDeviceCheck ?? false ? "?bypassDevice=true" : "";
                 return await apiClient.Post<LoginResponse>($"/login/sign{bypassDevice}", loginRequest);
             }
             catch // (Exception e)
