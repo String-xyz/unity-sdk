@@ -61,9 +61,9 @@ namespace StringSDK
             InitIframe(style);
         }
 
-        public static void SubmitCard() 
+        public static void SubmitCard(Cardholder cardholder) 
         {
-            sendEvent(new EmptyPayloadData(CHANNEL, SUBMIT_CARD).ToJSON());
+            sendEvent(CreateEvent(SUBMIT_CARD, cardholder));
         }
 
         async private static void sendEvent(string payload)
