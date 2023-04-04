@@ -15,6 +15,7 @@ namespace StringSDK
         public const string PROD_API_URL = "https://api.string-api.xyz";
         public const string SANDBOX_API_URL = "https://api.sandbox.string-api.xyz";
         public const string DEV_API_URL = "https://string-api.dev.string-api.xyz";
+        // TODO: Remove exposed local env before product launch
         public const string LOCAL_API_URL = "http://localhost:5555";
     }
 
