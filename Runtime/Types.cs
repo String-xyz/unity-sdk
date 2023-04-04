@@ -109,6 +109,22 @@ namespace StringSDK
     }
 
     [Serializable]
+    public class LoginOptions
+    {
+        public bool bypassDeviceCheck;
+
+        public LoginOptions(bool bypassDeviceCheck = false)
+        {
+            this.bypassDeviceCheck = bypassDeviceCheck;
+        }
+
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
+
+    [Serializable]
     public class Fingerprint
     {
         public string visitorId;

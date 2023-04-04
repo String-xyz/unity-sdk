@@ -43,7 +43,7 @@ namespace StringSDK
             return await apiClient.Get<LoginPayload>($"/login?walletAddress={walletAddr}");
         }
 
-        public static async UniTask<LoginResponse> Login(LoginRequest loginRequest, CancellationToken token = default)
+        public static async UniTask<LoginResponse> Login(LoginRequest loginRequest, LoginOptions loginOptions = default, CancellationToken token = default)
         {
             if (!WebEventManager.FingerprintAvailable())
             {
@@ -51,7 +51,8 @@ namespace StringSDK
             }
             try
             {
-                return await apiClient.Post<LoginResponse>($"/login/sign", loginRequest);
+                var bypassDevice = loginOptions?.bypassDeviceCheck ?? false ? "?bypassDevice=true" : "";
+                return await apiClient.Post<LoginResponse>($"/login/sign{bypassDevice}", loginRequest);
             }
             catch // (Exception e)
             {
