@@ -46,12 +46,13 @@ namespace StringSDK
 
         public static EnvironmentType Environment
         {
-            get => Environment;
+            get => environment;
             set {
-                Environment = value;
+                environment = value;
                 apiClient.BaseUrl = GetEnvironmentUrl(value);
             }
         }
+        static EnvironmentType environment;
 
         // Headers
         public static string ApiKey
