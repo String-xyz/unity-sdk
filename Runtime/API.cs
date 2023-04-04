@@ -10,6 +10,8 @@ namespace StringSDK
 {
     public static class Constants
     {
+        public const string DEFAULT_ENV = "https://api.sandbox.string-api.xyz";
+
         public const string PROD_API_URL = "https://api.string-api.xyz";
         public const string SANDBOX_API_URL = "https://api.sandbox.string-api.xyz";
         public const string DEV_API_URL = "https://string-api.dev.string-api.xyz";
@@ -32,7 +34,7 @@ namespace StringSDK
                     EnvironmentType.SANDBOX => Constants.SANDBOX_API_URL,
                     EnvironmentType.DEV => Constants.DEV_API_URL,
                     EnvironmentType.LOCAL => Constants.LOCAL_API_URL,
-                    _ => Constants.LOCAL_API_URL,
+                    _ => Constants.DEFAULT_ENV,
                 };
 
                 apiClient.BaseUrl = basePath;
@@ -64,7 +66,7 @@ namespace StringSDK
         static StringXYZ()
         {
             apiClient = new ApiClient();
-            apiClient.BaseUrl = Constants.LOCAL_API_URL;
+            apiClient.BaseUrl = Constants.DEFAULT_ENV;
         }
 
         // Methods
