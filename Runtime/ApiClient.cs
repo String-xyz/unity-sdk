@@ -19,9 +19,8 @@ namespace StringSDK
 		/// </summary>
 		/// <param name="baseUrl">base url for requests, e.g. https://api.example.com</param>
 		/// <param name="basicAuth">plaintext string to be base64 encoded as HTTP basic auth</param>
-		public ApiClient(string baseUrl, string basicAuth = null)
+		public ApiClient(string basicAuth = null)
 		{
-			this.baseUrl = baseUrl;
 			this.BasicAuth = basicAuth;
 		}
 
@@ -52,7 +51,12 @@ namespace StringSDK
 		/// <summary>
 		/// baseUrl defines the base url to use with each path
 		/// </summary>
-		public string baseUrl;
+		internal string BaseUrl
+		{
+			get => baseUrl;
+			set => baseUrl = value;
+		}
+		string baseUrl;
 
 		/// <summary>
 		/// Sends an HTTP GET request to the given path
