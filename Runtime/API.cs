@@ -23,30 +23,33 @@ namespace StringSDK
         // API Client
         static ApiClient apiClient;
 
-        public static EnvironmentType Environment
-        {
-            get => Environment;
-            set {
-                Environment = value;
-                var basePath = value switch 
-                {
-                    EnvironmentType.PROD => Constants.PROD_API_URL,
-                    EnvironmentType.SANDBOX => Constants.SANDBOX_API_URL,
-                    EnvironmentType.DEV => Constants.DEV_API_URL,
-                    EnvironmentType.LOCAL => Constants.LOCAL_API_URL,
-                    _ => Constants.DEFAULT_ENV,
-                };
-
-                apiClient.BaseUrl = basePath;
-            }
-        }
-
         public enum EnvironmentType
         {
             PROD,
             SANDBOX,
             DEV,
             LOCAL
+        }
+
+        static string GetEnvironmentUrl(EnvironmentType env)
+        {
+            return env switch
+            {
+                EnvironmentType.PROD => Constants.PROD_API_URL,
+                EnvironmentType.SANDBOX => Constants.SANDBOX_API_URL,
+                EnvironmentType.DEV => Constants.DEV_API_URL,
+                EnvironmentType.LOCAL => Constants.LOCAL_API_URL,
+                _ => Constants.DEFAULT_ENV,
+            };
+        }
+
+        public static EnvironmentType Environment
+        {
+            get => Environment;
+            set {
+                Environment = value;
+                apiClient.BaseUrl = GetEnvironmentUrl(value);
+            }
         }
 
         // Headers
