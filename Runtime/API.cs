@@ -14,9 +14,10 @@ namespace StringSDK
         static ApiClient apiClient;
 
         // Environment
-        public static Config.Environment Env
+        public static string Env
         {
-            set => apiClient.BaseUrl = Config.EnvironmentURL(value);
+            get => apiClient.BaseUrl;
+            set => apiClient.BaseUrl = value;
         }
 
         // Headers
