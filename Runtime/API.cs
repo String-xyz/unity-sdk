@@ -8,51 +8,17 @@ using System.Linq;
 
 namespace StringSDK
 {
-    public static class Constants
-    {
-        public const string DEFAULT_ENV = "https://api.sandbox.string-api.xyz";
-
-        public const string PROD_API_URL = "https://api.string-api.xyz";
-        public const string SANDBOX_API_URL = "https://api.sandbox.string-api.xyz";
-        public const string DEV_API_URL = "https://string-api.dev.string-api.xyz";
-        // TODO: Remove exposed local env before product launch
-        public const string LOCAL_API_URL = "http://localhost:5555";
-    }
-
     public static class StringXYZ
     {
         // API Client
         static ApiClient apiClient;
 
-        public enum EnvironmentType
+        // Environment
+        public static string Env
         {
-            PROD,
-            SANDBOX,
-            DEV,
-            LOCAL
+            get => apiClient.BaseUrl;
+            set => apiClient.BaseUrl = value;
         }
-
-        static string GetEnvironmentUrl(EnvironmentType env)
-        {
-            return env switch
-            {
-                EnvironmentType.PROD => Constants.PROD_API_URL,
-                EnvironmentType.SANDBOX => Constants.SANDBOX_API_URL,
-                EnvironmentType.DEV => Constants.DEV_API_URL,
-                EnvironmentType.LOCAL => Constants.LOCAL_API_URL,
-                _ => Constants.DEFAULT_ENV,
-            };
-        }
-
-        public static EnvironmentType Environment
-        {
-            get => environment;
-            set {
-                environment = value;
-                apiClient.BaseUrl = GetEnvironmentUrl(value);
-            }
-        }
-        static EnvironmentType environment;
 
         // Headers
         public static string ApiKey
@@ -71,7 +37,7 @@ namespace StringSDK
         static StringXYZ()
         {
             apiClient = new ApiClient();
-            apiClient.BaseUrl = Constants.DEFAULT_ENV;
+            Env = Config.ENV_DEFAULT;
         }
 
         // Methods

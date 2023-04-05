@@ -11,6 +11,8 @@ public class Cardholder
 {
     // cardholder's full name e.g John Doe. 
     public string name;
+
+    public Cardholder(string name) {this.name = name;}
 }
 
 [Serializable]
