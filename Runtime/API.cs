@@ -84,12 +84,12 @@ namespace StringSDK
 
         public static async UniTask<User> SetUserName(UserNameRequest userNameRequest, string userId, CancellationToken token = default)
         {
-            return await apiClient.Put<User>($"/users/{userId}", userNameRequest);
+            return await apiClient.Patch<User>($"/users/{userId}", userNameRequest);
         }
 
         public static async UniTask<UserStatusResponse> GetUserStatus(string userId, CancellationToken token = default)
         {
-            return await apiClient.Put<UserStatusResponse>($"/users/{userId}/status");
+            return await apiClient.Get<UserStatusResponse>($"/users/{userId}/status");
         }
 
         public static async UniTask<TransactionRequest> Quote(QuoteRequest quoteRequest, CancellationToken token = default)
