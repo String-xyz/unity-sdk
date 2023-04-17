@@ -92,12 +92,12 @@ namespace StringSDK
             return await apiClient.Get<UserStatusResponse>($"/users/{userId}/status");
         }
 
-        public static async UniTask<TransactionRequest> Quote(QuoteRequest quoteRequest, CancellationToken token = default)
+        public static async UniTask<Quote> Quote(TransactionRequest quoteRequest, CancellationToken token = default)
         {
-            return await apiClient.Post<TransactionRequest>($"/quotes", quoteRequest);
+            return await apiClient.Post<Quote>($"/quotes", quoteRequest);
         }
 
-        public static async UniTask<TransactionResponse> Transact(TransactionRequest transactionRequest, CancellationToken token = default)
+        public static async UniTask<TransactionResponse> Transact(ExecutionRequest transactionRequest, CancellationToken token = default)
         {
             if (!WebEventManager.CardValid || WebEventManager.CardToken == "")
             {
