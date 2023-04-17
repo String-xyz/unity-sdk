@@ -75,7 +75,7 @@ namespace StringSDK
         public string cardId;
         public string cvv;
 
-        public PaymentInfo(string cardToken, string cardId, string cvv)
+        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "")
         {
             this.cardToken = cardToken;
             this.cardId = cardId;
