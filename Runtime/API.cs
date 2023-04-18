@@ -48,22 +48,12 @@ namespace StringSDK
 
         public static async UniTask<LoginResponse> Login(LoginRequest loginRequest, bool bypassDeviceCheck = false, CancellationToken token = default)
         {
-            if (!WebEventManager.FingerprintAvailable())
-            {
-                Debug.Log("WARNING: Fingerprint Data Not Yet Available");
-            }
-            try
-            {
+            await Util.WaitUntil(() => WebEventManager.FingerprintAvailable());
+            try {
                 string bypass = "false";
                 if (bypassDeviceCheck) bypass = "true";
                 return await apiClient.Post<LoginResponse>($"/login/sign?bypassDevice={bypass}", loginRequest);
-            }
-            catch // (Exception e)
-            {
-                // Unsure how to check for 400 Bad response without parsing Exception string
-                // Skipping for now
-                // TODO: Parse exception for status code 400 before Creating user
-                // If the status is not 400, throw error up the stack
+            } catch { // TODO: Replace HTTP Client so that we can respond differently based on HTTP Status!
                 return await CreateUser(loginRequest);
             }
         }
