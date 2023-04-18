@@ -86,13 +86,13 @@ namespace StringSDK
     public class DefaultStyle: Style  { 
        public DefaultStyle() 
         {
-            this.@base = new BaseStyle("black", "16px");
-            this.autofill = new Autofill("yellow");
-            this.hover = new StateStyle("blue");
+            this.@base = new BaseStyle("white", "14px");
+            this.autofill = new Autofill("white");
+            this.hover = new StateStyle("white");
             this.focus = new StateStyle("white");
-            this.valid = new StateStyle("green");
-            this.invalid = new StateStyle("red");
-            this.placeholder = new Placeholder(new BaseStyle("ffff", "16px"), new StateStyle("blue"));
+            this.valid = new StateStyle("white");
+            this.invalid = new StateStyle("white");
+            this.placeholder = new Placeholder(new BaseStyle("ffff", "14px"), new StateStyle("white"));
         }
     }
 }
