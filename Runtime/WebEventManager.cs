@@ -9,7 +9,7 @@ namespace StringSDK
     public class WebEventManager:MonoBehaviour  
     {
         private const string CHANNEL = "STRING_PAY";
-        private const string INIT_IFRAME = "init_iframe";
+        private const string SET_STYLE  = "set_style";
         private const string SUBMIT_CARD = "submit_card"; 
 
         public static string CardToken  { private set; get; }
@@ -19,12 +19,10 @@ namespace StringSDK
         public static string FingerprintRequestId { private set; get; }
         public static Style defaultStyle { private set; get; }
         public static event Action<string> EventReceived;
-        public static event Action<bool> IframeLoaded;
+        public static event Action<bool> loaded;
         public static event Action<StringEvent<TokenizationPayload>> CardTokenized;
         public static event Action<StringEvent<ValidationPayload>> CardValidationChanged;
         public static event Action<StringEvent<VendorChangedPayload>> CardVendorChanged;
-
-        private static bool loaded = false;
         
         public static CanvasWebViewPrefab Webview { private set; get; }
 
@@ -45,28 +43,24 @@ namespace StringSDK
         public static string CreateEvent<T>(string name, T data)
         {
             var eventData = new PayloadData<T>(name, data);
-            return new StringEvent<T>(CHANNEL, eventData).ToJSON();      
+            return new StringEvent<T>(CHANNEL, eventData).ToJSON(); 
         }
-        public static void InitIframe(Style style) 
-        {
-            sendEvent(CreateEvent(INIT_IFRAME, style));
-        }
-         public static void InitIframe() 
-        {
-            sendEvent(CreateEvent(INIT_IFRAME, defaultStyle));
-        }
-
         public static void SetStyle(Style style) 
         { 
-            InitIframe(style);
+           sendEvent(CreateEvent(SET_STYLE, style));
         }
 
-        public static void SubmitCard(Cardholder cardholder) 
+        public static void SubmitCard() 
         {
-            sendEvent(CreateEvent(SUBMIT_CARD, cardholder));
+            sendEvent(createEmptyEvent(SUBMIT_CARD));
+        }
+        private static string createEmptyEvent(string name)
+        {
+            var emptyEvent = new EmptyPayloadData(CHANNEL, name);
+            return emptyEvent.ToJSON(); 
         }
 
-        async private static void sendEvent(string payload)
+        private static void sendEvent(string payload)
         {
             Debug.Log("sending event "+ payload);
             Webview.WebView.PostMessage(payload);
@@ -89,8 +83,7 @@ namespace StringSDK
                     // fingerprint is the first event we receive
                     // we should use this as a way of knowing the iframe has been loaded
                     // and is ready to recieve events, so setting loaded to true.
-                    loaded = true;
-                    IframeLoaded?.Invoke(true);
+                    loaded?.Invoke(true);
                     break;
                 case "card_tokenized":
                 var tokenization = StringEvent<TokenizationPayload>.FromJSON(strPayload);
