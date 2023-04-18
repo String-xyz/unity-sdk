@@ -127,7 +127,7 @@ namespace StringSDK
 
         public static bool FingerprintAvailable()
         {
-            return (FingerprintVisitorId != "" && FingerprintRequestId != "");
+            return (FingerprintVisitorId != null && FingerprintRequestId != null);
         }
     }
 }
