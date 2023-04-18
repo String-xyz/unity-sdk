@@ -10,9 +10,10 @@ namespace StringSDK
 {
     // JSON Serializations
     [Serializable]
-    public class QuoteRequest
+    public class TransactionRequest
     {
         public string userAddress;
+        public string assetName;
         public int chainId; // todo: make this unsigned in both the backend and this sdk
         public string contractAddress;
         public string contractFunction;
@@ -21,9 +22,10 @@ namespace StringSDK
         public string txValue;
         public string gasLimit;
 
-        public QuoteRequest(string userAddress, int chainId, string contractAddress, string contractFunction, string contractReturn, string[] contractParameters, string txValue, string gasLimit)
+        public TransactionRequest(string userAddress, string assetName, int chainId, string contractAddress, string contractFunction, string contractReturn, string[] contractParameters, string txValue, string gasLimit)
         {
             this.userAddress = userAddress;
+            this.assetName = assetName;
             this.chainId = chainId;
             this.contractAddress = contractAddress;
             this.contractFunction = contractFunction;
@@ -38,26 +40,65 @@ namespace StringSDK
             return JsonUtility.ToJson(this);
         }
     }
-
     [Serializable]
-    public class TransactionRequest
+    public class Estimate
     {
-        public string userAddress;
-        public long chainId; // todo: make this unsigned in both the backend and this sdk
-        public string contractAddress;
-        public string contractFunction;
-        public string contractReturn;
-        public string[] contractParameters;
-        public string txValue;
-        public string gasLimit;
         public long timestamp; // todo: make this unsigned in both the backend and this sdk
         public string baseUSD;
         public string gasUSD;
         public string tokenUSD;
         public string serviceUSD;
         public string totalUSD;
+
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
+    [Serializable]
+    public class Quote
+    {
+        public TransactionRequest request;
+        public Estimate estimate;
         public string signature;
+
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
+
+    [Serializable]
+    public class PaymentInfo
+    {
         public string cardToken;
+        public string cardId;
+        public string cvv;
+
+        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "")
+        {
+            this.cardToken = cardToken;
+            this.cardId = cardId;
+            this.cvv = cvv;
+        }
+
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
+
+    [Serializable]
+    public class ExecutionRequest
+    {
+        public Quote quote;
+        public PaymentInfo paymentInfo;
+
+        public ExecutionRequest(Quote quote, PaymentInfo paymentInfo)
+        {
+            this.quote = quote;
+            this.paymentInfo = paymentInfo;
+        }
 
         public override string ToString()
         {
