@@ -2,8 +2,8 @@
     "name": "xyz.string.sdk.runtime",
     "rootNamespace": "",
     "references": [
-        "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:a4bdb510ff365462e96286a1ab31a8b8"
+        "UniTask",
+        "Vuplex"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
