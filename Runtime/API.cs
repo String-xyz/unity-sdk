@@ -43,7 +43,8 @@ namespace StringSDK
         // Methods
         public static async UniTask<LoginPayload> RequestLogin(string walletAddr, CancellationToken token = default)
         {
-            return await apiClient.Get<LoginPayload>($"/login?walletAddress={walletAddr}");
+            var result = await apiClient.Get<LoginPayload>($"/login?walletAddress={walletAddr}");
+            return result.body;
         }
 
         public static async UniTask<LoginResponse> Login(LoginRequest loginRequest, bool bypassDeviceCheck = false, CancellationToken token = default)
@@ -52,43 +53,83 @@ namespace StringSDK
             await Util.WaitUntil(() => WebEventManager.FingerprintAvailable());
             loginRequest.fingerprint.visitorId = WebEventManager.FingerprintVisitorId;
             loginRequest.fingerprint.requestId = WebEventManager.FingerprintRequestId;
-            try {
-                string bypass = "false";
-                if (bypassDeviceCheck) bypass = "true";
-                return await apiClient.Post<LoginResponse>($"/login/sign?bypassDevice={bypass}", loginRequest);
-            } catch { // TODO: Replace HTTP Client so that we can respond differently based on HTTP Status!
-                return await CreateUser(loginRequest);
+            string bypass = "false";
+            if (bypassDeviceCheck) bypass = "true";
+            var result = await apiClient.Post<LoginResponse>($"/login/sign?bypassDevice={bypass}", loginRequest);
+            if (result.status == 200)
+            {
+                return result.body;
+            } 
+            else if (result.status == 400)
+            {
+                var createResultBody = await CreateUser(loginRequest);
+                return createResultBody;
+            }
+            else
+            {
+                Debug.Log($"Login returned error {result.errorMsg}");
+                return result.body;
             }
         }
 
         public static async UniTask<LoginResponse> CreateUser(LoginRequest loginRequest, CancellationToken token = default)
         {
-            return await apiClient.Post<LoginResponse>($"/users", loginRequest);
+            var result = await apiClient.Post<LoginResponse>($"/users", loginRequest);
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"CreateUser returned error {result.errorMsg}");
+            }
+            return result.body;
         }
 
         public static async UniTask<HttpResponse> RequestEmailAuth(string emailAddr, string userId, CancellationToken token = default)
         {
-            return await apiClient.Get($"/users/{userId}/verify-email?email={emailAddr}");
+            var result = await apiClient.Get<HttpResponse>($"/users/{userId}/verify-email?email={emailAddr}");
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"RequestEmailAuth returned error {result.errorMsg}");
+            }
+            return result.body;
         }
 
         public static async UniTask<HttpResponse> Logout(CancellationToken token = default)
         {
-            return await apiClient.Post<HttpResponse>($"/login/logout");
+            var result = await apiClient.Post<HttpResponse>($"/login/logout");
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"Logout returned error {result.errorMsg}");
+            }
+            return result.body;
         }
 
         public static async UniTask<User> SetUserName(UserNameRequest userNameRequest, string userId, CancellationToken token = default)
         {
-            return await apiClient.Patch<User>($"/users/{userId}", userNameRequest);
+            var result = await apiClient.Patch<User>($"/users/{userId}", userNameRequest);
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"SetUserName returned error {result.errorMsg}");
+            }
+            return result.body;
         }
 
         public static async UniTask<UserStatusResponse> GetUserStatus(string userId, CancellationToken token = default)
         {
-            return await apiClient.Get<UserStatusResponse>($"/users/{userId}/status");
+            var result = await apiClient.Get<UserStatusResponse>($"/users/{userId}/status");
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"GetUserStatus returned error {result.errorMsg}");
+            }
+            return result.body;
         }
 
         public static async UniTask<Quote> Quote(TransactionRequest quoteRequest, CancellationToken token = default)
         {
-            return await apiClient.Post<Quote>($"/quotes", quoteRequest);
+            var result = await apiClient.Post<Quote>($"/quotes", quoteRequest);
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"Quote returned error {result.errorMsg}");
+            }
+            return result.body;
         }
 
         public static async UniTask<TransactionResponse> Transact(ExecutionRequest transactionRequest, CancellationToken token = default)
@@ -97,7 +138,22 @@ namespace StringSDK
             {
                 Debug.Log("WARNING: Card Info is invalid or not provided yet");
             }
-            return await apiClient.Post<TransactionResponse>($"/transactions", transactionRequest);
+            var result = await apiClient.Post<TransactionResponse>($"/transactions", transactionRequest);
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"Transact returned error {result.errorMsg}");
+            }
+            return result.body;
+        }
+
+        public static async UniTask<CustomerInstrument[]> GetCards(CancellationToken token = default)
+        {
+            var result = await apiClient.Get<CustomerInstrument[]>($"/cards");
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"GetCards returned error {result.errorMsg}");
+            }
+            return result.body;
         }
 
         // Card stuff
@@ -110,6 +166,7 @@ namespace StringSDK
         {
             return WebEventManager.CardToken;
         }
+
     }
 
 }

@@ -32,6 +32,7 @@ namespace StringSDK
 		public static async UniTask<HttpResponse> Request(HttpMethod method, string url, Dictionary<string, string> headers = null, object body = null, CancellationToken token = default)
 		{
 			HttpResponse response = new HttpResponse();
+
 			// TODO: don't automatically replace empty arrays w null just to get items to work
 			var requestJson = body == null ? string.Empty : JsonUtility.ToJson(body).Replace("[]", "null");
 			using (var uwr =
@@ -62,11 +63,10 @@ namespace StringSDK
 
 				try
 				{
+					// OP will only have data if response is 200
 					var op = await uwr.SendWebRequest().WithCancellation(token);
-
 					token.ThrowIfCancellationRequested();
-
-					response.status = (ushort)op.responseCode;
+					response.status = op.responseCode;
 					response.body = op.downloadHandler?.text;
 					response.headers = op.GetResponseHeaders();
 				}
@@ -74,6 +74,13 @@ namespace StringSDK
 				{
 					UnityEngine.Debug.LogWarning($"Http Request canceled. method={method} url={url}");
 				}
+				catch (UnityWebRequestException e)
+				{
+					// Continue if we received a response other than 200
+					response.status = e.ResponseCode;
+					response.errorMsg = e.Message;
+				}
+
 			}
 			return response;
 		}
