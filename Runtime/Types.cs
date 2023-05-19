@@ -256,4 +256,48 @@ namespace StringSDK
             return JsonUtility.ToJson(this);
         }
     }
+
+    [Serializable]
+    public class CustomerInstrument
+    {
+        string id;
+        string type;
+        UInt64 expiry_month;
+        UInt64 expiry_year;
+        string scheme;
+        string last4;
+        string fingerprint;
+        string bin;
+        string card_type;
+        string card_category;
+        string issuer;
+        string issuer_country;
+        string product_id;
+        string product_type;
+        BillingAddress billing_address;
+        Phone phone;
+
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
+
+    [Serializable]
+    public class BillingAddress
+    {
+        string address_line1;
+        string address_line2;
+        string city;
+        string state;
+        string zip;
+        string country;
+    }
+
+    [Serializable]
+    public class Phone
+    {
+        string country_code;
+        string number;
+    }
 }
