@@ -140,7 +140,7 @@ namespace StringSDK
             {
                 Debug.Log("WARNING: Card Info is invalid or not provided yet");
             }
-            saveCard = "true";
+            var saveCard = "true";
             if (!savePayment) saveCard = "false";
             var result = await apiClient.Post<TransactionResponse>($"/transactions?saveCard={saveCard}", transactionRequest);
             if (!result.IsSuccess)
