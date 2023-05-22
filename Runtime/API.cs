@@ -49,12 +49,18 @@ namespace StringSDK
 
         public static async UniTask<LoginResponse> Login(LoginRequest loginRequest, bool bypassDeviceCheck = false, CancellationToken token = default)
         {
-            // Update fingerprint data
-            await Util.WaitUntil(() => WebEventManager.FingerprintAvailable());
-            loginRequest.fingerprint.visitorId = WebEventManager.FingerprintVisitorId;
-            loginRequest.fingerprint.requestId = WebEventManager.FingerprintRequestId;
             string bypass = "false";
-            if (bypassDeviceCheck) bypass = "true";
+            if (bypassDeviceCheck) 
+            {
+                bypass = "true";
+            }
+            else
+            {
+                // Update fingerprint data
+                await Util.WaitUntil(() => WebEventManager.FingerprintAvailable());
+                loginRequest.fingerprint.visitorId = WebEventManager.FingerprintVisitorId;
+                loginRequest.fingerprint.requestId = WebEventManager.FingerprintRequestId;
+            }
             var result = await apiClient.Post<LoginResponse>($"/login/sign?bypassDevice={bypass}", loginRequest);
             if (result.status == 200)
             {
