@@ -138,7 +138,7 @@ namespace StringSDK
             return result.body;
         }
 
-        public static async UniTask<TransactionResponse> Transact(ExecutionRequest transactionRequest, bool savePayment = true, CancellationToken token = default)
+        public static async UniTask<TransactionResponse> Transact(ExecutionRequest transactionRequest, CancellationToken token = default)
         {
             // If using a new payment method, check if card info is valid
             if (transactionRequest.paymentInfo.cardId == "" && 
@@ -146,9 +146,7 @@ namespace StringSDK
             {
                 Debug.Log("WARNING: Card Info is invalid or not provided yet");
             }
-            var saveCard = "true";
-            if (!savePayment) saveCard = "false";
-            var result = await apiClient.Post<TransactionResponse>($"/transactions?saveCard={saveCard}", transactionRequest);
+            var result = await apiClient.Post<TransactionResponse>($"/transactions", transactionRequest);
             if (!result.IsSuccess)
             {
                 Debug.Log($"Transact returned error {result.errorMsg}");

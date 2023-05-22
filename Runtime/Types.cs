@@ -75,11 +75,14 @@ namespace StringSDK
         public string cardId;
         public string cvv;
 
-        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "")
+        public bool saveCard;
+
+        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "", bool saveCard = "true")
         {
             this.cardToken = cardToken;
             this.cardId = cardId;
             this.cvv = cvv;
+            this.saveCard = saveCard;
         }
 
         public override string ToString()
