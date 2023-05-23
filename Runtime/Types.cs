@@ -77,7 +77,7 @@ namespace StringSDK
 
         public bool saveCard;
 
-        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "", bool saveCard = "true")
+        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "", bool saveCard = true)
         {
             this.cardToken = cardToken;
             this.cardId = cardId;
