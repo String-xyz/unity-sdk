@@ -166,7 +166,7 @@ namespace StringSDK
 			result.status = response.status;
 			result.errorMsg = response.errorMsg;
 
-			if (response.IsSuccess)
+			if (response.IsSuccess && response.status != 204)
 			{
 				// this is a workaround for https://answers.unity.com/questions/1123326/jsonutility-array-not-supported.html
 				if (response.body.TrimStart()[0] == '[')

@@ -75,11 +75,14 @@ namespace StringSDK
         public string cardId;
         public string cvv;
 
-        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "")
+        public bool saveCard;
+
+        public PaymentInfo(string cardToken = "", string cardId = "", string cvv = "", bool saveCard = false)
         {
             this.cardToken = cardToken;
             this.cardId = cardId;
             this.cvv = cvv;
+            this.saveCard = saveCard;
         }
 
         public override string ToString()
@@ -260,22 +263,22 @@ namespace StringSDK
     [Serializable]
     public class CustomerInstrument
     {
-        string id;
-        string type;
-        UInt64 expiry_month;
-        UInt64 expiry_year;
-        string scheme;
-        string last4;
-        string fingerprint;
-        string bin;
-        string card_type;
-        string card_category;
-        string issuer;
-        string issuer_country;
-        string product_id;
-        string product_type;
-        BillingAddress billing_address;
-        Phone phone;
+        public string id;
+        public string type;
+        public UInt64 expiry_month;
+        public UInt64 expiry_year;
+        public string scheme;
+        public string last4;
+        public string fingerprint;
+        public string bin;
+        public string card_type;
+        public string card_category;
+        public string issuer;
+        public string issuer_country;
+        public string product_id;
+        public string product_type;
+        public BillingAddress billing_address;
+        public Phone phone;
 
         public override string ToString()
         {
@@ -286,18 +289,18 @@ namespace StringSDK
     [Serializable]
     public class BillingAddress
     {
-        string address_line1;
-        string address_line2;
-        string city;
-        string state;
-        string zip;
-        string country;
+        public string address_line1;
+        public string address_line2;
+        public string city;
+        public string state;
+        public string zip;
+        public string country;
     }
 
     [Serializable]
     public class Phone
     {
-        string country_code;
-        string number;
+        public string country_code;
+        public string number;
     }
 }
