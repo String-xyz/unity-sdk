@@ -100,7 +100,7 @@ namespace StringSDK
 
         public static async UniTask<HttpResponse> Logout(CancellationToken token = default)
         {
-            var result = await apiClient.Post($"/login/logout");
+            HttpResponse result = await apiClient.Post(path: $"/login/logout", body: null);
             if (!result.IsSuccess)
             {
                 Debug.Log($"Logout returned error {result.errorMsg}");
