@@ -90,22 +90,22 @@ namespace StringSDK
 
         public static async UniTask<HttpResponse> RequestEmailAuth(string emailAddr, string userId, CancellationToken token = default)
         {
-            var result = await apiClient.Get<HttpResponse>($"/users/{userId}/verify-email?email={emailAddr}");
+            var result = await apiClient.Get($"/users/{userId}/verify-email?email={emailAddr}");
             if (!result.IsSuccess)
             {
                 Debug.Log($"RequestEmailAuth returned error {result.errorMsg}");
             }
-            return result.body;
+            return result;
         }
 
         public static async UniTask<HttpResponse> Logout(CancellationToken token = default)
         {
-            var result = await apiClient.Post<HttpResponse>($"/login/logout");
+            var result = await apiClient.Post($"/login/logout");
             if (!result.IsSuccess)
             {
                 Debug.Log($"Logout returned error {result.errorMsg}");
             }
-            return result.body;
+            return result;
         }
 
         public static async UniTask<User> SetUserName(UserNameRequest userNameRequest, string userId, CancellationToken token = default)
