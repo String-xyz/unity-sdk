@@ -261,24 +261,16 @@ namespace StringSDK
     }
 
     [Serializable]
-    public class CustomerInstrument
+    public class CardInstrument
     {
         public string id;
-        public string type;
-        public UInt64 expiry_month;
-        public UInt64 expiry_year;
-        public string scheme;
+        public string cvv;
         public string last4;
-        public string fingerprint;
-        public string bin;
-        public string card_type;
-        public string card_category;
-        public string issuer;
-        public string issuer_country;
-        public string product_id;
-        public string product_type;
-        public BillingAddress billing_address;
-        public Phone phone;
+        public Int64 expiryMonth;
+        public Int64 expiryYear;
+        public string type;
+        public string cardType;
+        public string scheme;
 
         public override string ToString()
         {
@@ -287,20 +279,8 @@ namespace StringSDK
     }
 
     [Serializable]
-    public class BillingAddress
+    public class PreValidateEmailRequest
     {
-        public string address_line1;
-        public string address_line2;
-        public string city;
-        public string state;
-        public string zip;
-        public string country;
-    }
-
-    [Serializable]
-    public class Phone
-    {
-        public string country_code;
-        public string number;
+        public string email;
     }
 }

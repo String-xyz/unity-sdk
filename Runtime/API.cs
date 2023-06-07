@@ -98,6 +98,18 @@ namespace StringSDK
             return result.body;
         }
 
+        public static async UniTask<HttpResponse> PreValidateEmail(string emailAddr, string userId, CancellationToken token = default)
+        {
+            PreValidateEmailRequest request = new();
+            request.email = emailAddr;
+            var result = await apiClient.Post<HttpResponse>($"/users/{userId}/email/pre-validate", request);
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"PreValidateEmail returned error {result.errorMsg}");
+            }
+            return result.body;
+        }
+
         public static async UniTask<HttpResponse> Logout(CancellationToken token = default)
         {
             var result = await apiClient.Post<HttpResponse>($"/login/logout");
@@ -154,9 +166,9 @@ namespace StringSDK
             return result.body;
         }
 
-        public static async UniTask<CustomerInstrument[]> GetCards(CancellationToken token = default)
+        public static async UniTask<CardInstrument[]> GetCards(CancellationToken token = default)
         {
-            var result = await apiClient.Get<CustomerInstrument[]>($"/cards");
+            var result = await apiClient.Get<CardInstrument[]>($"/cards");
             if (!result.IsSuccess)
             {
                 Debug.Log($"GetCards returned error {result.errorMsg}");
