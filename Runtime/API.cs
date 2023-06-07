@@ -98,6 +98,16 @@ namespace StringSDK
             return result.body;
         }
 
+        public static async UniTask<HttpResponse> PreValidateEmail(string emailAddr, string userId, CancellationToken token = default)
+        {
+            var result = await apiClient.Post<HttpResponse>($"/users/{userId}/email/pre-validate?email={emailAddr}");
+            if (!result.IsSuccess)
+            {
+                Debug.Log($"PreValidateEmail returned error {result.errorMsg}");
+            }
+            return result.body;
+        }
+
         public static async UniTask<HttpResponse> Logout(CancellationToken token = default)
         {
             var result = await apiClient.Post<HttpResponse>($"/login/logout");
@@ -178,4 +188,3 @@ namespace StringSDK
     }
 
 }
-

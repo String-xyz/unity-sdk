@@ -230,14 +230,12 @@ namespace StringSDK
     [Serializable]
     public class UserNameRequest
     {
-        public string walletAddress;
         public string firstName;
         public string middleName;
         public string lastName;
 
-        public UserNameRequest(string walletAddress, string firstName, string middleName, string lastName)
+        public UserNameRequest(string firstName, string middleName, string lastName)
         {
-            this.walletAddress = walletAddress;
             this.firstName = firstName;
             this.middleName = middleName;
             this.lastName = lastName;
