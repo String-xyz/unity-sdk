@@ -11,7 +11,7 @@ namespace StringSDK
     public static class StringXYZ
     {
         // API Client
-        static ApiClient apiClient;
+        public static ApiClient apiClient;
 
         // Environment
         public static string Env
