@@ -11,7 +11,7 @@ namespace StringSDK
     public static class StringXYZ
     {
         // API Client
-        static ApiClient apiClient;
+        public static ApiClient apiClient;
 
         // Environment
         public static string Env
@@ -90,22 +90,22 @@ namespace StringSDK
 
         public static async UniTask<HttpResponse> RequestEmailAuth(string emailAddr, string userId, CancellationToken token = default)
         {
-            var result = await apiClient.Get<HttpResponse>($"/users/{userId}/verify-email?email={emailAddr}");
+            var result = await apiClient.Get($"/users/{userId}/verify-email?email={emailAddr}");
             if (!result.IsSuccess)
             {
                 Debug.Log($"RequestEmailAuth returned error {result.errorMsg}");
             }
-            return result.body;
+            return result;
         }
 
         public static async UniTask<HttpResponse> Logout(CancellationToken token = default)
         {
-            var result = await apiClient.Post<HttpResponse>($"/login/logout");
+            HttpResponse result = await apiClient.Post(path: $"/login/logout", body: null);
             if (!result.IsSuccess)
             {
                 Debug.Log($"Logout returned error {result.errorMsg}");
             }
-            return result.body;
+            return result;
         }
 
         public static async UniTask<User> SetUserName(UserNameRequest userNameRequest, string userId, CancellationToken token = default)
@@ -154,9 +154,9 @@ namespace StringSDK
             return result.body;
         }
 
-        public static async UniTask<CustomerInstrument[]> GetCards(CancellationToken token = default)
+        public static async UniTask<CardInstrument[]> GetCards(CancellationToken token = default)
         {
-            var result = await apiClient.Get<CustomerInstrument[]>($"/cards");
+            var result = await apiClient.Get<CardInstrument[]>($"/cards");
             if (!result.IsSuccess)
             {
                 Debug.Log($"GetCards returned error {result.errorMsg}");
