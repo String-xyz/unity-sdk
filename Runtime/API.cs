@@ -73,7 +73,7 @@ namespace StringSDK
             }
             else
             {
-                Debug.Log($"Login returned error {result.errorMsg}");
+                OnError?.Invoke($"Login returned error {result.errorMsg}");
                 return result.body;
             }
         }
@@ -83,7 +83,7 @@ namespace StringSDK
             var result = await apiClient.Post<LoginResponse>($"/users", loginRequest);
             if (!result.IsSuccess)
             {
-                Debug.Log($"CreateUser returned error {result.errorMsg}");
+                OnError?.Invoke($"CreateUser returned error {result.errorMsg}");
             }
             return result.body;
         }
@@ -93,7 +93,7 @@ namespace StringSDK
             var result = await apiClient.Get($"/users/{userId}/verify-email?email={emailAddr}");
             if (!result.IsSuccess)
             {
-                Debug.Log($"RequestEmailAuth returned error {result.errorMsg}");
+                OnError?.Invoke($"RequestEmailAuth returned error {result.errorMsg}");
             }
             return result;
         }
@@ -103,7 +103,7 @@ namespace StringSDK
             HttpResponse result = await apiClient.Post(path: $"/login/logout", body: null);
             if (!result.IsSuccess)
             {
-                Debug.Log($"Logout returned error {result.errorMsg}");
+                OnError?.Invoke($"Logout returned error {result.errorMsg}");
             }
             return result;
         }
@@ -113,7 +113,7 @@ namespace StringSDK
             var result = await apiClient.Patch<User>($"/users/{userId}", userNameRequest);
             if (!result.IsSuccess)
             {
-                Debug.Log($"SetUserName returned error {result.errorMsg}");
+                OnError?.Invoke($"SetUserName returned error {result.errorMsg}");
             }
             return result.body;
         }
@@ -123,7 +123,7 @@ namespace StringSDK
             var result = await apiClient.Get<UserStatusResponse>($"/users/{userId}/status");
             if (!result.IsSuccess)
             {
-                Debug.Log($"GetUserStatus returned error {result.errorMsg}");
+                OnError?.Invoke($"GetUserStatus returned error {result.errorMsg}");
             }
             return result.body;
         }
@@ -133,7 +133,7 @@ namespace StringSDK
             var result = await apiClient.Post<Quote>($"/quotes", quoteRequest);
             if (!result.IsSuccess)
             {
-                Debug.Log($"Quote returned error {result.errorMsg}");
+                OnError?.Invoke($"Quote returned error {result.errorMsg}");
             }
             return result.body;
         }
@@ -144,12 +144,12 @@ namespace StringSDK
             if (transactionRequest.paymentInfo.cardId == "" && 
             (!WebEventManager.CardValid || WebEventManager.CardToken == ""))
             {
-                Debug.Log("WARNING: Card Info is invalid or not provided yet");
+                OnWarning?.Invoke("WARNING: Card Info is invalid or not provided yet");
             }
             var result = await apiClient.Post<TransactionResponse>($"/transactions", transactionRequest);
             if (!result.IsSuccess)
             {
-                Debug.Log($"Transact returned error {result.errorMsg}");
+                OnError?.Invoke($"Transact returned error {result.errorMsg}");
             }
             return result.body;
         }
@@ -159,7 +159,7 @@ namespace StringSDK
             var result = await apiClient.Get<CardInstrument[]>($"/cards");
             if (!result.IsSuccess)
             {
-                Debug.Log($"GetCards returned error {result.errorMsg}");
+                OnError?.Invoke($"GetCards returned error {result.errorMsg}");
             }
             return result.body;
         }
@@ -174,6 +174,10 @@ namespace StringSDK
         {
             return WebEventManager.CardToken;
         }
+
+        // Error handling
+        public static event Action<string> OnError;
+        public static event Action<string> OnWarning;
 
     }
 
