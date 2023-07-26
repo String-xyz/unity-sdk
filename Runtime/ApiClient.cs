@@ -7,31 +7,15 @@ using UnityEngine;
 
 namespace StringSDK
 {
-	/// <summary>
-	/// Provides an interface to an http rest api
-	///
-	/// Handles authentication, signing requests and base url
-	/// </summary>
 	public class ApiClient
 	{
-		/// <summary>
-		/// Create a json api client for a REST api
-		/// </summary>
-		/// <param name="baseUrl">base url for requests, e.g. https://api.example.com</param>
-		/// <param name="basicAuth">plaintext string to be base64 encoded as HTTP basic auth</param>
 		public ApiClient(string basicAuth = null)
 		{
 			this.BasicAuth = basicAuth;
 		}
 
-		/// <summary>
-		/// accessToken authenticates us with a server using x-access-token
-		/// </summary>
 		public string accessToken;
 
-		/// <summary>
-		/// basicAuth authenticates us with a server using base64 encoded basic auth string
-		/// </summary>
 		public string BasicAuth
 		{
 			get => basicAuth;
@@ -39,18 +23,8 @@ namespace StringSDK
 		}
 		string basicAuth;
 
-
-		/// <summary>
-		/// headers set here are sent with every request
-		/// </summary>
-		/// <typeparam name="string">http header name, e.g. "Content-Type"</typeparam>
-		/// <typeparam name="string">http header value, e.g. "application/json"</typeparam>
-		/// <returns></returns>
 		public Dictionary<string, string> headers = new Dictionary<string, string>();
 
-		/// <summary>
-		/// baseUrl defines the base url to use with each path
-		/// </summary>
 		internal string BaseUrl
 		{
 			get => baseUrl;
@@ -58,85 +32,30 @@ namespace StringSDK
 		}
 		string baseUrl;
 
-		/// <summary>
-		/// Sends an HTTP GET request to the given path
-		/// </summary>
-		/// <param name="path">path to api resource, e.g. "/v1/tweets"</param>
-		/// <param name="headers">dictionary of http headers</param>
-		/// <param name="token">cancellation token</param>
-		/// <typeparam name="T">A <see cref="System.Serializable" /> class to populate with data. </typeparam>
-		/// <returns>T</returns>
 		public async UniTask<HttpResponseObject<T>> Get<T>(string path, Dictionary<string, string> headers = null, CancellationToken token = default)
 		{
 			return await Request<T>(HttpMethod.Get, path, headers, token: token);
 		}
 
-		/// <summary>
-		/// Sends an HTTP PUT request to the given path
-		/// </summary>
-		/// <param name="path">path to api resource, e.g. "/v1/tweets"</param>
-		/// <param name="headers">dictionary of http headers</param>
-		/// <param name="token">cancellation token</param>
-		/// <typeparam name="T">A <see cref="System.Serializable" /> class to populate with data. </typeparam>
-		/// <returns>T</returns>
 		public async UniTask<HttpResponseObject<T>> Put<T>(string path, object body = null, Dictionary<string, string> headers = null, CancellationToken token = default)
 		{
 			return await Request<T>(HttpMethod.Put, path, headers, body, token: token);
 		}
 
-		/// <summary>
-		/// Sends an HTTP POST request to the given path
-		/// </summary>
-		/// <param name="path">path to api resource, e.g. "/v1/tweets"</param>
-		/// <param name="headers">dictionary of http headers</param>
-		/// <param name="token">cancellation token</param>
-		/// <typeparam name="T">A <see cref="System.Serializable" /> class to populate with data. </typeparam>
-		/// <returns>T</returns>
 		public async UniTask<HttpResponseObject<T>> Post<T>(string path, object body = null, Dictionary<string, string> headers = null, CancellationToken token = default)
 		{
 			return await Request<T>(HttpMethod.Post, path, headers, body, token: token);
 		}
 
-		/// <summary>
-		/// Sends an HTTP DELETE request to the given path
-		/// </summary>
-		/// <param name="path">path to api resource, e.g. "/v1/tweets"</param>
-		/// <param name="headers">dictionary of http headers</param>
-		/// <param name="token">cancellation token</param>
-		/// <typeparam name="T">A <see cref="System.Serializable" /> class to populate with data. </typeparam>
-		/// <returns>T</returns>
 		public async UniTask<HttpResponseObject<T>> Delete<T>(string path, object body = null, Dictionary<string, string> headers = null, CancellationToken token = default)
 		{
 			return await Request<T>(HttpMethod.Delete, path, headers, body, token: token);
 		}
 
-		/// <summary>
-		/// Sends an HTTP PATCH request to the given path
-		/// </summary>
-		/// <param name="path">path to api resource, e.g. "/v1/tweets"</param>
-		/// <param name="headers">dictionary of http headers</param>
-		/// <param name="token">cancellation token</param>
-		/// <typeparam name="T">A <see cref="System.Serializable" /> class to populate with data. </typeparam>
-		/// <returns>T</returns>
 		public async UniTask<HttpResponseObject<T>> Patch<T>(string path, object body = null, Dictionary<string, string> headers = null, CancellationToken token = default)
 		{
 			return await Request<T>(HttpMethod.Patch, path, headers, body, token: token);
 		}
-
-		// public async UniTask<Dictionary<string, float>> GetDictionary(string path, Dictionary<string, string> headers = null, CancellationToken token = default)
-		// {
-		// 	return await RequestDictionary(HttpMethod.Get, path, headers, token: token);
-		// }
-
-		// public async UniTask<float> GetFloat(string path, Dictionary<string, string> headers = null, CancellationToken token = default)
-		// {
-		// 	return await RequestFloat(HttpMethod.Get, path, headers, token: token);
-		// }
-
-		// public async UniTask<int> GetInt(string path, Dictionary<string, string> headers = null, CancellationToken token = default)
-		// {
-		// 	return await RequestInt(HttpMethod.Get, path, headers, token: token);
-		// }
 
 		public async UniTask<HttpResponse> Get(string path, Dictionary<string, string> headers = null, CancellationToken token = default)
 		{
