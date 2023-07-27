@@ -33,7 +33,6 @@ namespace StringSDK
 		{
 			HttpResponse response = new HttpResponse();
 
-			// TODO: don't automatically replace empty arrays w null just to get items to work
 			var requestJson = body == null ? string.Empty : JsonUtility.ToJson(body).Replace("[]", "null");
 			using (var uwr =
 				method == HttpMethod.Get ? UnityWebRequest.Get(url) :
@@ -41,7 +40,6 @@ namespace StringSDK
 				UnityWebRequest.Put(url, requestJson)
 			)
 			{
-				// https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
 				if (method == HttpMethod.Post)
 				{
 					uwr.method = "POST";

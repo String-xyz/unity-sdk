@@ -20,13 +20,14 @@ namespace StringSDK
             set => apiClient.BaseUrl = value;
         }
 
-        // Headers
+        // Developer Headers
         public static string ApiKey
         {
             get => apiClient.headers.ContainsKey("X-Api-Key") ? apiClient.headers["X-Api-Key"] : null;
             set => apiClient.headers["X-Api-Key"] = value;
         }
 
+        // User Headers
         public static string Authorization
         {
             get => apiClient.headers.ContainsKey("Authorization") ? apiClient.headers["Authorization"] : null;
@@ -40,13 +41,14 @@ namespace StringSDK
             Env = Config.ENV_DEFAULT;
         }
 
-        // Methods
+        // Request Login Payload from server
         public static async UniTask<LoginPayload> RequestLogin(string walletAddr, CancellationToken token = default)
         {
             var result = await apiClient.Get<LoginPayload>($"/login?walletAddress={walletAddr}");
             return result.body;
         }
 
+        // Login or create new user using signed payload
         public static async UniTask<LoginResponse> Login(LoginRequest loginRequest, bool bypassDeviceCheck = false, CancellationToken token = default)
         {
             string bypass = "false";
@@ -78,6 +80,7 @@ namespace StringSDK
             }
         }
 
+        // Create new user using signed payload
         public static async UniTask<LoginResponse> CreateUser(LoginRequest loginRequest, CancellationToken token = default)
         {
             var result = await apiClient.Post<LoginResponse>($"/users", loginRequest);
@@ -88,6 +91,7 @@ namespace StringSDK
             return result.body;
         }
 
+        // Send an email to the user to verify them with String
         public static async UniTask<HttpResponse> RequestEmailAuth(string emailAddr, string userId, CancellationToken token = default)
         {
             var result = await apiClient.Get($"/users/{userId}/verify-email?email={emailAddr}");
@@ -98,6 +102,7 @@ namespace StringSDK
             return result;
         }
 
+        // Log the user out of the String service
         public static async UniTask<HttpResponse> Logout(CancellationToken token = default)
         {
             HttpResponse result = await apiClient.Post(path: $"/login/logout", body: null);
@@ -108,6 +113,7 @@ namespace StringSDK
             return result;
         }
 
+        // Update the user's name with the String service
         public static async UniTask<User> SetUserName(UserNameRequest userNameRequest, string userId, CancellationToken token = default)
         {
             var result = await apiClient.Patch<User>($"/users/{userId}", userNameRequest);
@@ -118,6 +124,7 @@ namespace StringSDK
             return result.body;
         }
 
+        // Check the user's verification status with the String service
         public static async UniTask<UserStatusResponse> GetUserStatus(string userId, CancellationToken token = default)
         {
             var result = await apiClient.Get<UserStatusResponse>($"/users/{userId}/status");
@@ -128,6 +135,7 @@ namespace StringSDK
             return result.body;
         }
 
+        // Retrieve a real-time quote for a desired transaction
         public static async UniTask<Quote> Quote(TransactionRequest quoteRequest, CancellationToken token = default)
         {
             var result = await apiClient.Post<Quote>($"/quotes", quoteRequest);
@@ -138,6 +146,7 @@ namespace StringSDK
             return result.body;
         }
 
+        // Execute the quote payload
         public static async UniTask<TransactionResponse> Transact(ExecutionRequest transactionRequest, CancellationToken token = default)
         {
             // If using a new payment method, check if card info is valid
@@ -154,6 +163,7 @@ namespace StringSDK
             return result.body;
         }
 
+        // Get users saved card info
         public static async UniTask<CardInstrument[]> GetCards(CancellationToken token = default)
         {
             var result = await apiClient.Get<CardInstrument[]>($"/cards");
@@ -164,12 +174,13 @@ namespace StringSDK
             return result.body;
         }
 
-        // Card stuff
+        // Check if payment info is valid
         public static bool ReadyForPayment()
         {
             return (WebEventManager.CardToken != "" && WebEventManager.CardValid);
         }
 
+        // Get secure payment token
         public static string GetPaymentToken()
         {
             return WebEventManager.CardToken;
